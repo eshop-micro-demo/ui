@@ -1,5 +1,3 @@
-const STORE_BASE_URL="http://localhost:8081"
-const CHECKOUT_BASE_URL="http://localhost:9090"
 let cart = []; // default empty cart
 
 const product_row_tmpl = _.template(`
@@ -42,7 +40,7 @@ $(function() {
       .done(function(data, textStatus, jqXHR) {
         console.log("checkout successful",data);
         // clear existing cart items
-        cart = [];
+        cart = [];  // TODO: does not work
       })
       .fail(function( jqXHR, textStatus, errorThrown ) {
         console.error(errorThrown);
