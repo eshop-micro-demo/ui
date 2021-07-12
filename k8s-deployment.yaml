@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ui
+  namespace: microshop
   labels:
     app: microshop
     component: ui
@@ -24,14 +25,15 @@ spec:
         - containerPort: 3000
         env:
         - name: STORE_URL
-          value: "http://store.dh4r4pvj.ga"
+          value: "https://store.dh4r4pvj.ga"
         - name: CHECKOUT_URL
-          value: "http://checkout.dh4r4pvj.ga"
+          value: "https://checkout.dh4r4pvj.ga"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: ui
+  namespace: microshop
   labels:
     app: microshop
     component: ui
@@ -47,10 +49,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ui
+  namespace: microshop
   annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   rules:
-    - host: dh4r4pvj.ga
+    - host: www.dh4r4pvj.ga
       http:
         paths:
           - path: /
@@ -60,3 +64,7 @@ spec:
                 name: ui
                 port:
                   number: 80
+  tls:
+  - hosts:
+    - www.dh4r4pvj.ga
+    secretName: ui-cert
